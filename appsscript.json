@@ -1,0 +1,40 @@
+{
+  "timeZone": "Asia/Kolkata",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      {
+        "userSymbol": "Drive",
+        "version": "v2",
+        "serviceId": "drive"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/spreadsheets"
+  ],
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name": "Quick It",
+      "logoUrl": "https://yagisanatode.com/wp-content/uploads/2021/06/yagifolder.jpg",
+      "useLocaleFromApp": true,
+      "homepageTrigger": {
+        "runFunction": "onhomepage",
+        "enabled": true
+      }
+    },
+    "gmail": {
+      "primaryColor": "#3a621e",
+      "secondaryColor": "#94f441"
+    }
+  },
+  "webapp": {
+    "executeAs": "USER_DEPLOYING",
+    "access": "DOMAIN"
+  }
+}
