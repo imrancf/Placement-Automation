@@ -81,11 +81,21 @@ function clearSheetFilesFromPropServ() {
 }
 
 // Fetching Headers of the sheet
-function fetchHead() {
-  var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/17zC-KfqXq1RLoPuXz_5g_bKXgxknntSgnPLeukBX8BI/edit#gid=0");
+function fetchHead(url) {
+  var ss = SpreadsheetApp.openByUrl(url);
   var sheet = ss.getActiveSheet();
   var hRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getDisplayValues();
   // console.log(hRow.flat(1));
 
   return hRow.flat(1);
 }
+
+function createNotice(e){
+  let templateNotice = DriveApp.getFileById('1cmVZoLQVKAkSn7cT-1hyXqFUTrUWtcbUQfJgi_LeWcQ');
+  let destinationFolder = DriveApp.getFileById('17bGaatlPAtVrVaXn9xeMx1roEacWE7oP');
+
+  let copy = templateNotice.makeCopy(`e.formInput.name[0]`,destinationFolder);
+  let doc = DocumentApp.openById(copy.getId());
+}
+
+

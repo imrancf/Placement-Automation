@@ -1,4 +1,4 @@
-function onhomepage() {
+function onhomepage(e) {
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
     .setImageStyle(CardService.ImageStyle.CIRCLE);
@@ -21,14 +21,15 @@ function onhomepage() {
 
   let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
     .setFieldName('dateTime')
-    .setTitle('Recruitment Date & Time');
+    .setTitle('Recruitment Date & Time')
+    .setOnChangeAction();
 
   let cardSection2Divider1 = CardService.newDivider();
 
   let param1 = "doc";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -59,7 +60,7 @@ function onhomepage() {
   let param2 = "sheet"
 
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -71,20 +72,22 @@ function onhomepage() {
 
   let sheetFilePick = JSON.parse(PropertiesService.getUserProperties().getProperty("sheetFilePick"));
   let sheetProp = PropertiesService.getUserProperties().getProperty("sheetFiles");
+  // console.log(sheetProp);
+
 
   if (sheetProp == null || !sheetFilePick) {
     clearSheetFilesFromPropServ() // Ensures there are no files in the Properties Service;
   } else {
     let docs = JSON.parse(sheetProp);
     console.log("docouter", docs[0])
-
+    let url = docs[0].url;
+    console.log("url=",url);
+    var col = fetchHead(url);
     cardSection2DecoratedText2 = CardService.newDecoratedText().setText(docs[0].name)
       .setButton(cardSection2DecoratedText2Button1);
   }
 
   // PropertiesService.getUserProperties().setProperty("sheetFilePick", JSON.stringify(false));
-
-  let col = fetchHead();
   let condition = false;
 
   let cardSection1SelectionInput1 = CardService.newSelectionInput()
@@ -94,11 +97,9 @@ function onhomepage() {
   col.forEach((element) => {
     cardSection1SelectionInput1 = cardSection1SelectionInput1.addItem(element, element, condition);
   })
-  // .addItem('Choice 1', '1', false)
-  // .addItem('Choice 2', '2', false)
-  // .addItem('Choice 3', '3', false);
+
   let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('TODO')
+    .setFunctionName('TODO').setParameters({"e":e})
   let cardSection1ButtonList1Button1 = CardService.newTextButton()
     .setText('Button 1')
     .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
@@ -122,4 +123,7 @@ function onhomepage() {
     .addSection(cardSection2)
     .build();
   return card;
+}
+function TODO(e){
+  console.log("value of e=",e.formInputs.dateTime);
 }
