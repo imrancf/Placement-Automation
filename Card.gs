@@ -21,9 +21,8 @@ function onhomepage(e) {
 
   let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
     .setFieldName('dateTime')
-    .setTitle('Recruitment Date & Time')
-    .setOnChangeAction();
-
+    .setTitle('Recruitment Date & Time');
+    
   let cardSection2Divider1 = CardService.newDivider();
 
   let param1 = "doc";
@@ -94,6 +93,7 @@ function onhomepage(e) {
     .setFieldName('Select ')
     .setTitle('Select Email Column')
     .setType(CardService.SelectionInputType.DROPDOWN);
+    col=["about","home"];
   col.forEach((element) => {
     cardSection1SelectionInput1 = cardSection1SelectionInput1.addItem(element, element, condition);
   })
@@ -125,5 +125,9 @@ function onhomepage(e) {
   return card;
 }
 function TODO(e){
-  console.log("value of e=",e.formInputs.dateTime);
+  // console.log(e);
+  let dateInMs = e.formInput.dateTime.msSinceEpoch;
+  console.log("date",dateInMs);
+  let date = new Date(dateInMs);
+  console.log(date.toString());
 }

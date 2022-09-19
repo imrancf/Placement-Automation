@@ -94,8 +94,15 @@ function createNotice(e){
   let templateNotice = DriveApp.getFileById('1cmVZoLQVKAkSn7cT-1hyXqFUTrUWtcbUQfJgi_LeWcQ');
   let destinationFolder = DriveApp.getFileById('17bGaatlPAtVrVaXn9xeMx1roEacWE7oP');
 
-  let copy = templateNotice.makeCopy(`e.formInput.name[0]`,destinationFolder);
+  let copy = templateNotice.makeCopy(`e.formInput.name`,destinationFolder);
   let doc = DocumentApp.openById(copy.getId());
+  let body = doc.getBody();
+  body.replaceText('{{Date}}',Utilities.formatDate(new Date(),"IST","yyyy-MM-dd"));
+  body.replaceText('{{Company_Name}}',e.formInput.name);
+  body.replaceText('{{}}',e.formInput.name);
+  
 }
 
-
+// function date(){
+//   console.log(Utilities.formatDate(new Date(),"IST","yyyy-MM-dd"));
+// }
