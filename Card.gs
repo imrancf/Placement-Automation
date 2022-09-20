@@ -22,13 +22,39 @@ function onhomepage(e) {
   let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
     .setFieldName('dateTime')
     .setTitle('Recruitment Date & Time');
-    
+
   let cardSection2Divider1 = CardService.newDivider();
 
+  let cardSection1ButtonList1Button1Action1 = CardService.newAction()
+    .setFunctionName('onNextBtn')
+    .setParameters({ "e": JSON.stringify(e) })
+
+  let cardSection1ButtonList1Button1 = CardService.newTextButton()
+    .setText('Next')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(cardSection1ButtonList1Button1Action1);
+
+  let cardSection2 = CardService.newCardSection()
+    .addWidget(cardSection2TextInput1)
+    .addWidget(cardSection2TextInput2)
+    .addWidget(cardSection2TextInput3)
+    .addWidget(cardSection2DatePTimePicker1)
+    .addWidget(cardSection2Divider1)
+    .addWidget(cardSection1ButtonList1Button1);
+
+  let card = CardService.newCardBuilder()
+    .setHeader(cardHeader1)
+    .addSection(cardSection2)
+    .build();
+  return card;
+}
+
+function onNextBtn(e) {
   let param1 = "doc";
+  let param2 = "sheet";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -43,7 +69,7 @@ function onhomepage(e) {
   let prop = PropertiesService.getUserProperties().getProperty("files");
 
   if (prop == null || !filePick) {
-    clearFilesFromPropServ() // Ensures there are no files in the Properties Service;
+    clearFilesFromPropServ();
   } else {
     let docs = JSON.parse(prop);
     console.log("docouter", docs[0])
@@ -56,10 +82,8 @@ function onhomepage(e) {
 
   let cardSection2Divider2 = CardService.newDivider();
 
-  let param2 = "sheet"
-
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -71,16 +95,14 @@ function onhomepage(e) {
 
   let sheetFilePick = JSON.parse(PropertiesService.getUserProperties().getProperty("sheetFilePick"));
   let sheetProp = PropertiesService.getUserProperties().getProperty("sheetFiles");
-  // console.log(sheetProp);
-
 
   if (sheetProp == null || !sheetFilePick) {
-    clearSheetFilesFromPropServ() // Ensures there are no files in the Properties Service;
+    clearSheetFilesFromPropServ();
   } else {
     let docs = JSON.parse(sheetProp);
     console.log("docouter", docs[0])
     let url = docs[0].url;
-    console.log("url=",url);
+    console.log("url=", url);
     var col = fetchHead(url);
     cardSection2DecoratedText2 = CardService.newDecoratedText().setText(docs[0].name)
       .setButton(cardSection2DecoratedText2Button1);
@@ -93,41 +115,40 @@ function onhomepage(e) {
     .setFieldName('Select ')
     .setTitle('Select Email Column')
     .setType(CardService.SelectionInputType.DROPDOWN);
-    col=["about","home"];
+
   col.forEach((element) => {
     cardSection1SelectionInput1 = cardSection1SelectionInput1.addItem(element, element, condition);
   })
 
   let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('TODO').setParameters({"e":e})
+    .setFunctionName('onSaveBtn')
+    .setParameters({ "e": JSON.stringify(e) })
+
   let cardSection1ButtonList1Button1 = CardService.newTextButton()
-    .setText('Button 1')
-    .setTextButtonStyle(CardService.TextButtonStyle.TEXT)
+    .setText('Save')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setOnClickAction(cardSection1ButtonList1Button1Action1);
 
   let cardSection2 = CardService.newCardSection()
-    .addWidget(cardSection2TextInput1)
-    .addWidget(cardSection2TextInput2)
-    .addWidget(cardSection2TextInput3)
-    .addWidget(cardSection2DatePTimePicker1)
-    .addWidget(cardSection2Divider1)
     .addWidget(cardSection2DecoratedText1)
     .addWidget(cardSection2Divider2)
     .addWidget(cardSection2DecoratedText2)
-    .addWidget(cardSection2Divider1)
+    .addWidget(cardSection2Divider2)
     .addWidget(cardSection1SelectionInput1)
+    .addWidget(cardSection2Divider2)
     .addWidget(cardSection1ButtonList1Button1);
 
   let card = CardService.newCardBuilder()
-    .setHeader(cardHeader1)
     .addSection(cardSection2)
     .build();
   return card;
 }
-function TODO(e){
-  // console.log(e);
-  let dateInMs = e.formInput.dateTime.msSinceEpoch;
-  console.log("date",dateInMs);
+
+
+function test(e) {
+  console.log(e);
+  let dateInMs = JSON.parse(e.formInput.dateTime.msSinceEpoch);
+  console.log("date", dateInMs);
   let date = new Date(dateInMs);
   console.log(date.toString());
 }

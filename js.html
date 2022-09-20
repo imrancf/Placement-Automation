@@ -106,7 +106,7 @@
    * @return command to close the web-app window.
    */
   function closeWebAppWindow(){
-    return window.top.close();
+    return window.self.close();
   };
  
   /**
