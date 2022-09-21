@@ -1,7 +1,7 @@
 function onhomepage(e) {
   let formInput = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
-  console.log(formInput, "input");
-  let formInputLength
+
+  let formInputLength;
   if (formInput) {
     formInputLength = Object.keys(formInput).length;
   }
@@ -58,7 +58,7 @@ function onhomepage(e) {
   let param2 = "sheet";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -88,7 +88,7 @@ function onhomepage(e) {
   let cardSection2Divider2 = CardService.newDivider();
 
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -178,10 +178,13 @@ function onhomepage(e) {
 
 function saveData(e) {
   PropertiesService.getUserProperties().setProperties({ "inputData": JSON.stringify(e.formInput) });
+
 }
 
 function clearCard(e) {
-  console.log(e);
-  console.log(e.parameters.status);
+  PropertiesService.getUserProperties().deleteProperty("inputData");
+  PropertiesService.getUserProperties().setProperty("filePick", JSON.stringify(false));
+  PropertiesService.getUserProperties().setProperty("sheetFilePick", JSON.stringify(false));
+  return CardService.newNavigation().updateCard(onhomepage(e));
 }
 
