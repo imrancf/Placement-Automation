@@ -1,7 +1,11 @@
 function onhomepage(e) {
   let formInput = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
   console.log(formInput, "input");
-  let formInputLength = Object.keys(formInput).length;
+  let formInputLength
+  if (formInput) {
+    formInputLength = Object.keys(formInput).length;
+  }
+
 
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
@@ -10,11 +14,13 @@ function onhomepage(e) {
   let cardSection2TextInput1 = CardService.newTextInput();
   let cardSection2TextInput2 = CardService.newTextInput();
   let cardSection2TextInput3 = CardService.newTextInput();
+  let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
 
   if (formInputLength > 1) {
     cardSection2TextInput1 = cardSection2TextInput1.setValue(formInput.name);
     cardSection2TextInput2 = cardSection2TextInput2.setValue(formInput.profiles)
     cardSection2TextInput3 = cardSection2TextInput3.setValue(formInput.package)
+    cardSection2DatePTimePicker1 = cardSection2DatePTimePicker1.setValueInMsSinceEpoch(formInput.dateTime.msSinceEpoch);
   }
 
   cardSection2TextInput1 = cardSection2TextInput1
@@ -33,7 +39,7 @@ function onhomepage(e) {
     .setTitle('Package')
     .setMultiline(false);
 
-  let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
+  cardSection2DatePTimePicker1 = cardSection2DatePTimePicker1
     .setFieldName('dateTime')
     .setTitle('Recruitment Date & Time');
 
@@ -52,7 +58,7 @@ function onhomepage(e) {
   let param2 = "sheet";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -82,7 +88,7 @@ function onhomepage(e) {
   let cardSection2Divider2 = CardService.newDivider();
 
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -124,7 +130,7 @@ function onhomepage(e) {
   })
 
   let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('onSaveBtn')
+    .setFunctionName('createNotice')
     .setParameters({ "e": JSON.stringify(e) })
 
   let cardSection1ButtonList1Button1 = CardService.newTextButton()
@@ -132,11 +138,27 @@ function onhomepage(e) {
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setOnClickAction(cardSection1ButtonList1Button1Action1);
 
+  let status = 1;
+
+  let cardSection1ButtonList1Button2Action1 = CardService.newAction()
+    .setFunctionName('clearCard')
+    .setParameters({ "status": JSON.stringify(status) })
+
+  let cardSection1ButtonList1Button2 = CardService.newTextButton()
+    .setText('Clear')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(cardSection1ButtonList1Button2Action1);
+
+  let cardSection1ButtonList1 = CardService.newButtonSet()
+    .addButton(cardSection1ButtonList1Button1)
+    .addButton(cardSection1ButtonList1Button2);
+
   let cardSection2 = CardService.newCardSection()
     .addWidget(cardSection2TextInput1)
     .addWidget(cardSection2TextInput2)
     .addWidget(cardSection2TextInput3)
     .addWidget(cardSection2DatePTimePicker1)
+    .addWidget(cardSection2Divider1)
     .addWidget(cardSection2ButtonList1Button1)
     .addWidget(cardSection2Divider1)
     .addWidget(cardSection2DecoratedText1)
@@ -145,7 +167,7 @@ function onhomepage(e) {
     .addWidget(cardSection2Divider2)
     .addWidget(cardSection1SelectionInput1)
     .addWidget(cardSection2Divider2)
-    .addWidget(cardSection1ButtonList1Button1);
+    .addWidget(cardSection1ButtonList1);
 
   let card = CardService.newCardBuilder()
     .setHeader(cardHeader1)
@@ -157,10 +179,9 @@ function onhomepage(e) {
 function saveData(e) {
   PropertiesService.getUserProperties().setProperties({ "inputData": JSON.stringify(e.formInput) });
 }
-function test(e) {
+
+function clearCard(e) {
   console.log(e);
-  let dateInMs = JSON.parse(e.formInput.dateTime.msSinceEpoch);
-  console.log("date", dateInMs);
-  let date = new Date(dateInMs);
-  console.log(date.toString());
+  console.log(e.parameters.status);
 }
+

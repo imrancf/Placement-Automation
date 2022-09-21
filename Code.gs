@@ -16,7 +16,7 @@ function pickerConfig() {
   DriveApp.getRootFolder();
   return {
     oauthToken: ScriptApp.getOAuthToken(),
-    developerKey: "AIzaSyBI_fVDuIk2sZfNdKi_BFxpRGeyXDQyyPo"
+    developerKey: "AIzaSyBKdhXo3-OLXghFyPpHrHXrEGSqhvmifzI"
   }
 }
 
@@ -91,10 +91,11 @@ function fetchHead(url) {
 }
 
 function createNotice(e){
+  console.log("e",e)
   let templateNotice = DriveApp.getFileById('1cmVZoLQVKAkSn7cT-1hyXqFUTrUWtcbUQfJgi_LeWcQ');
-  let destinationFolder = DriveApp.getFileById('17bGaatlPAtVrVaXn9xeMx1roEacWE7oP');
+  let destinationFolder = DriveApp.getFolderById('17bGaatlPAtVrVaXn9xeMx1roEacWE7oP');
 
-  let copy = templateNotice.makeCopy(`e.formInput.name`,destinationFolder);
+  let copy = templateNotice.makeCopy(e.formInput.name,destinationFolder);
   let doc = DocumentApp.openById(copy.getId());
   let body = doc.getBody();
   body.replaceText('{{Date}}',Utilities.formatDate(new Date(),"IST","yyyy-MM-dd"));
@@ -105,9 +106,14 @@ function createNotice(e){
   body.replaceText('{{Recruitment_Date}}',date);
 
   doc.saveAndClose();
-  doc.getUrl();
-}
+  let docID = doc.getId();
+  // Converting doc to pdf
+  let file = DriveApp.getFileById(docID);
+  pdfFile = file.getAs('application/pdf');
 
-// function date(){
-//   console.log(Utilities.formatDate(new Date(),"IST","yyyy-MM-dd HH:mm"))
-// }
+  destinationFolder.createFile(pdfFile);
+
+ //delete the original doc file
+  let docFile = DriveApp.getFileById(docID);
+  docFile.setTrashed(true);
+}
