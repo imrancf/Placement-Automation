@@ -16,7 +16,7 @@ function pickerConfig() {
   DriveApp.getRootFolder();
   return {
     oauthToken: ScriptApp.getOAuthToken(),
-    developerKey: "AIzaSyBKdhXo3-OLXghFyPpHrHXrEGSqhvmifzI"
+    developerKey: "AIzaSyBI_fVDuIk2sZfNdKi_BFxpRGeyXDQyyPo"
   }
 }
 

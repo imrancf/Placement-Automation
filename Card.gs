@@ -1,22 +1,34 @@
 function onhomepage(e) {
-  let input = PropertiesService.getUserProperties().getProperty("inputData");
-  console.log(input);
+  let formInput = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
+  console.log(formInput, "input");
+  let formInputLength = Object.keys(formInput).length;
+
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
     .setImageStyle(CardService.ImageStyle.CIRCLE);
 
-  let cardSection2TextInput1 = CardService.newTextInput()
+  let cardSection2TextInput1 = CardService.newTextInput();
+  let cardSection2TextInput2 = CardService.newTextInput();
+  let cardSection2TextInput3 = CardService.newTextInput();
+
+  if (formInputLength > 1) {
+    cardSection2TextInput1 = cardSection2TextInput1.setValue(formInput.name);
+    cardSection2TextInput2 = cardSection2TextInput2.setValue(formInput.profiles)
+    cardSection2TextInput3 = cardSection2TextInput3.setValue(formInput.package)
+  }
+
+  cardSection2TextInput1 = cardSection2TextInput1
     .setFieldName('name')
     .setTitle('Name of the Company')
     .setMultiline(false);
 
-  let cardSection2TextInput2 = CardService.newTextInput()
+  cardSection2TextInput2 = cardSection2TextInput2
     .setFieldName('profiles')
     .setTitle('Job Profiles')
     .setHint('Enter the Single or Multiple Profiles separated by " , ".')
     .setMultiline(false);
 
-  let cardSection2TextInput3 = CardService.newTextInput()
+  cardSection2TextInput3 = cardSection2TextInput3
     .setFieldName('package')
     .setTitle('Package')
     .setMultiline(false);
@@ -25,7 +37,7 @@ function onhomepage(e) {
     .setFieldName('dateTime')
     .setTitle('Recruitment Date & Time');
 
-    let cardSection2ButtonList1Button1Action1 = CardService.newAction()
+  let cardSection2ButtonList1Button1Action1 = CardService.newAction()
     .setFunctionName('saveData')
     .setParameters({ "e": JSON.stringify(e) })
 
@@ -40,7 +52,7 @@ function onhomepage(e) {
   let param2 = "sheet";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -70,7 +82,7 @@ function onhomepage(e) {
   let cardSection2Divider2 = CardService.newDivider();
 
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -142,9 +154,8 @@ function onhomepage(e) {
   return card;
 }
 
-function saveData(e){
-  // console.log("e vales",e);
-  PropertiesService.getUserProperties().setProperty({"inputData":JSON.stringify(e.formInput)});
+function saveData(e) {
+  PropertiesService.getUserProperties().setProperties({ "inputData": JSON.stringify(e.formInput) });
 }
 function test(e) {
   console.log(e);
