@@ -16,7 +16,7 @@ function pickerConfig() {
   DriveApp.getRootFolder();
   return {
     oauthToken: ScriptApp.getOAuthToken(),
-    developerKey: "AIzaSyBI_fVDuIk2sZfNdKi_BFxpRGeyXDQyyPo"
+    developerKey: "AIzaSyBKdhXo3-OLXghFyPpHrHXrEGSqhvmifzI"
   }
 }
 
@@ -99,10 +99,15 @@ function createNotice(e){
   let body = doc.getBody();
   body.replaceText('{{Date}}',Utilities.formatDate(new Date(),"IST","yyyy-MM-dd"));
   body.replaceText('{{Company_Name}}',e.formInput.name);
-  body.replaceText('{{}}',e.formInput.name);
-  
+  body.replaceText('{{Job_Profiles}}',e.formInput.profiles);
+  body.replaceText('{{Package}}',e.formInput.package);
+  let date = Utilities.formatDate(new Date(e.formInput.dateTime.msSinceEpoch),"IST","yyyy-MM-dd HH:mm")
+  body.replaceText('{{Recruitment_Date}}',date);
+
+  doc.saveAndClose();
+  doc.getUrl();
 }
 
 // function date(){
-//   console.log(Utilities.formatDate(new Date(),"IST","yyyy-MM-dd"));
+//   console.log(Utilities.formatDate(new Date(),"IST","yyyy-MM-dd HH:mm"))
 // }

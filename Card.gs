@@ -1,4 +1,6 @@
 function onhomepage(e) {
+  let input = PropertiesService.getUserProperties().getProperty("inputData");
+  console.log(input);
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
     .setImageStyle(CardService.ImageStyle.CIRCLE);
@@ -23,38 +25,22 @@ function onhomepage(e) {
     .setFieldName('dateTime')
     .setTitle('Recruitment Date & Time');
 
-  let cardSection2Divider1 = CardService.newDivider();
-
-  let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('onNextBtn')
+    let cardSection2ButtonList1Button1Action1 = CardService.newAction()
+    .setFunctionName('saveData')
     .setParameters({ "e": JSON.stringify(e) })
 
-  let cardSection1ButtonList1Button1 = CardService.newTextButton()
-    .setText('Next')
+  let cardSection2ButtonList1Button1 = CardService.newTextButton()
+    .setText('Save Data')
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
-    .setOnClickAction(cardSection1ButtonList1Button1Action1);
+    .setOnClickAction(cardSection2ButtonList1Button1Action1);
 
-  let cardSection2 = CardService.newCardSection()
-    .addWidget(cardSection2TextInput1)
-    .addWidget(cardSection2TextInput2)
-    .addWidget(cardSection2TextInput3)
-    .addWidget(cardSection2DatePTimePicker1)
-    .addWidget(cardSection2Divider1)
-    .addWidget(cardSection1ButtonList1Button1);
+  let cardSection2Divider1 = CardService.newDivider();
 
-  let card = CardService.newCardBuilder()
-    .setHeader(cardHeader1)
-    .addSection(cardSection2)
-    .build();
-  return card;
-}
-
-function onNextBtn(e) {
   let param1 = "doc";
   let param2 = "sheet";
 
   let cardSection2DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param1}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param1}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -70,6 +56,7 @@ function onNextBtn(e) {
 
   if (prop == null || !filePick) {
     clearFilesFromPropServ();
+
   } else {
     let docs = JSON.parse(prop);
     console.log("docouter", docs[0])
@@ -83,7 +70,7 @@ function onNextBtn(e) {
   let cardSection2Divider2 = CardService.newDivider();
 
   let cardSection2DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/cloudfort.in/s/AKfycbz0Fv-q9bad8sPYWiycgSEq-_8ZK5aZZHhtcO8QPim_7S93J1DP1Db_GiKg4GBw-pEC/exec?param=${param2}`)
+    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
     .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
@@ -116,6 +103,10 @@ function onNextBtn(e) {
     .setTitle('Select Email Column')
     .setType(CardService.SelectionInputType.DROPDOWN);
 
+  if (!col) {
+    col = [""]
+  }
+
   col.forEach((element) => {
     cardSection1SelectionInput1 = cardSection1SelectionInput1.addItem(element, element, condition);
   })
@@ -130,6 +121,12 @@ function onNextBtn(e) {
     .setOnClickAction(cardSection1ButtonList1Button1Action1);
 
   let cardSection2 = CardService.newCardSection()
+    .addWidget(cardSection2TextInput1)
+    .addWidget(cardSection2TextInput2)
+    .addWidget(cardSection2TextInput3)
+    .addWidget(cardSection2DatePTimePicker1)
+    .addWidget(cardSection2ButtonList1Button1)
+    .addWidget(cardSection2Divider1)
     .addWidget(cardSection2DecoratedText1)
     .addWidget(cardSection2Divider2)
     .addWidget(cardSection2DecoratedText2)
@@ -139,12 +136,16 @@ function onNextBtn(e) {
     .addWidget(cardSection1ButtonList1Button1);
 
   let card = CardService.newCardBuilder()
+    .setHeader(cardHeader1)
     .addSection(cardSection2)
     .build();
   return card;
 }
 
-
+function saveData(e){
+  // console.log("e vales",e);
+  PropertiesService.getUserProperties().setProperty({"inputData":JSON.stringify(e.formInput)});
+}
 function test(e) {
   console.log(e);
   let dateInMs = JSON.parse(e.formInput.dateTime.msSinceEpoch);
