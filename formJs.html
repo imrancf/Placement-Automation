@@ -1,6 +1,6 @@
 <script>
   var pickerApiLoaded = false;
-  console.log("Picker for document started running");
+  
  
   /**
    * Use the API Loader script to dynamically load google.picker
@@ -41,7 +41,7 @@
       const view = new google.picker.DocsView()
         .setIncludeFolders(true)
         .setSelectFolderEnabled(true)
-        .setMimeTypes('application/vnd.google-apps.document')
+        .setMimeTypes('application/vnd.google-apps.form')
         .setLabel('Docs');
  
  
@@ -90,7 +90,7 @@
       google.script.run
         .withFailureHandler(errorMessage)
         .withSuccessHandler(closeWebAppWindow)
-        .storeDriveSelections(filesAndFolders);
+        .storeDriveSelectionsForForm(filesAndFolders);
       
     }
  
@@ -116,6 +116,4 @@
  
     document.getElementById("message").innerHTML = e;
   };
-  console.log("Picker for document stopped running");
-
 </script>
