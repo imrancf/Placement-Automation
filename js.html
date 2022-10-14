@@ -1,4 +1,16 @@
 <script>
+  let mime = "<?=mime?>";
+  console.log("mime in script",mime);
+  var auth = '';
+  if(mime == "doc"){
+    auth = 'application/vnd.google-apps.document';
+  }
+  else if(mime == "sheet"){
+    auth = 'application/vnd.google-apps.spreadsheet';
+  }
+    else if(mime == "form"){
+    auth = 'application/vnd.google-apps.form';
+  }
   var pickerApiLoaded = false;
   console.log("Picker for document started running");
  
@@ -41,7 +53,7 @@
       const view = new google.picker.DocsView()
         .setIncludeFolders(true)
         .setSelectFolderEnabled(true)
-        .setMimeTypes('application/vnd.google-apps.document')
+        .setMimeTypes(auth)
         .setLabel('Docs');
  
  
@@ -84,13 +96,28 @@
           type: doc.type
         }
       })
- 
-      // Sends filesAndFolders server-side to be stored.
-      // Then runs the function ot close the Picker and WebApp window.
-      google.script.run
+  
+      if(mime == "doc"){
+        google.script.run
         .withFailureHandler(errorMessage)
         .withSuccessHandler(closeWebAppWindow)
         .storeDriveSelections(filesAndFolders);
+      }
+      else if(mime == "sheet"){
+        google.script.run
+        .withFailureHandler(errorMessage)
+        .withSuccessHandler(closeWebAppWindow)
+        .storeDriveSelectionsForSheet(filesAndFolders);
+      }
+        else if(mime == "form"){
+        google.script.run
+        .withFailureHandler(errorMessage)
+        .withSuccessHandler(closeWebAppWindow)
+        .storeDriveSelectionsForForm(filesAndFolders);
+      }
+      // Sends filesAndFolders server-side to be stored.
+      // Then runs the function ot close the Picker and WebApp window.
+      
       
     }
  
@@ -106,7 +133,8 @@
    * @return command to close the web-app window.
    */
   function closeWebAppWindow(){
-    return window.self.close();
+     window.top.close();
+     return google.script.run.updateCardd();
   };
  
   /**

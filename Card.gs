@@ -1,4 +1,6 @@
+const deploy_link = "https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=";
 function onhomepage(e) {
+  console.log("e=", e);
 
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
@@ -9,12 +11,7 @@ function onhomepage(e) {
   let cardSection2TextInput3 = CardService.newTextInput();
   let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
 
-  // if (formInputLength > 1) {
-  //   cardSection2TextInput1 = cardSection2TextInput1.setValue(formInput.name);
-  //   cardSection2TextInput2 = cardSection2TextInput2.setValue(formInput.profiles)
-  //   cardSection2TextInput3 = cardSection2TextInput3.setValue(formInput.package)
-  //   cardSection2DatePTimePicker1 = cardSection2DatePTimePicker1.setValueInMsSinceEpoch(formInput.dateTime.msSinceEpoch);
-  // }
+
 
   cardSection2TextInput1 = cardSection2TextInput1
     .setFieldName('name')
@@ -68,18 +65,26 @@ function onhomepage(e) {
   return card;
 }
 
-function formCard(e) {
+function formCard() {
   let param1 = "doc";
   let param2 = "sheet"
   let param3 = "form";
-  
 
-  let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param1}`)
-    .setOpenAs(CardService.OpenAs.OVERLAY)
-    .setOnClose(CardService.OnClose.NOTHING))
+  //  Have to set the Function in palce of setOpenLink 
+
+  var action = CardService.newAction().setFunctionName('openLinkCallback').setParameters({ "reload": "yes", "param1": param1 });
+  let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOnClickAction(action)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Template');
+
+
+
+  // let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
+  //   .setUrl(`${deploy_link}${param1}`)
+  //   .setOpenAs(CardService.OpenAs.OVERLAY)
+  //   .setOnClose(CardService.OnClose.RELOAD))
+  //   .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
+  //   .setAltText('Select Template');
 
   let cardSection1DecoratedText1 = CardService.newDecoratedText()
     .setText('Select the Template')
@@ -98,12 +103,13 @@ function formCard(e) {
 
     cardSection1DecoratedText1 = CardService.newDecoratedText().setText(docs[0].name)
       .setButton(cardSection1DecoratedText1Button1);
+    console.log("Picker for document stopped running");
   }
 
   let cardSection1DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param2}`)
+    .setUrl(`${deploy_link}${param2}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
-    .setOnClose(CardService.OnClose.NOTHING))
+    .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Sheet');
 
@@ -140,6 +146,7 @@ function formCard(e) {
 
   col.forEach((element) => {
     cardSection1SelectionInput1 = cardSection1SelectionInput1.addItem(element, element, condition);
+    console.log("Email Coloumn working")
   })
 
   let cardSection1SelectionInput2 = CardService.newSelectionInput()
@@ -150,10 +157,10 @@ function formCard(e) {
     cardSection1SelectionInput2 = cardSection1SelectionInput2.addItem(element, element, condition);
   })
 
-let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbw13mUGh4tCN_4oWFTkf_G0kL4jJg-liW8otuJNHVGh92oRNlkmAHauOi9v8WtEj-uDow/exec?param=${param3}`)
+  let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
+    .setUrl(`${deploy_link}${param3}`)
     .setOpenAs(CardService.OpenAs.OVERLAY)
-    .setOnClose(CardService.OnClose.NOTHING))
+    .setOnClose(CardService.OnClose.RELOAD))
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Form');
 
@@ -181,8 +188,7 @@ let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOpenLink
     .setMultiline(false);
 
   let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('sendNotice')
-    .setParameters({ "e": JSON.stringify(e) });
+    .setFunctionName('sendNotice');
 
   let cardSection1ButtonList1Button1 = CardService.newTextButton()
     .setText('Send Notice')
@@ -211,4 +217,31 @@ let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOpenLink
     .build();
   return card;
 }
+function test() {
+  let param1 = "doc";
+  console.log(`${deploy_link}${param1}`);
+}
 
+function openLinkCallback(e) {
+  console.log(e);
+  let param1 = e.parameters.param1;
+  return CardService.newActionResponseBuilder()
+    .setOpenLink(CardService.newOpenLink()
+      .setUrl(`${deploy_link}${param1}`)
+      .setOpenAs(CardService.OpenAs.OVERLAY)
+      .setOnClose(CardService.OnClose.RELOAD))
+      .build();
+
+}
+
+function updateCardd(){
+  //  let card = formCard();
+
+  // let navigation = CardService.newNavigation()
+  //   .updateCard(card);
+  // let actionResponse = CardService.newActionResponseBuilder()
+  //   .setNavigation(navigation);
+  // return actionResponse.build();
+
+  return formCard();
+}

@@ -1,19 +1,26 @@
+
 function doGet(e) {
   console.log(e)
-  if (e.parameter.param == "doc") {
-    let html = HtmlService.createTemplateFromFile("index")
-      .evaluate().setTitle("Select Document");
-    return html;
-  } else if (e.parameter.param == "sheet") {
-    let html = HtmlService.createTemplateFromFile("sheet")
-      .evaluate().setTitle("Select Sheet");
-    return html;
-  }
-  else if (e.parameter.param == "form") {
-    let html = HtmlService.createTemplateFromFile("form")
-      .evaluate().setTitle("Select Form");
-    return html;
-  }
+  let html = HtmlService.createTemplateFromFile("index");
+  let mime = e.parameter.param;
+  html.mime = mime;
+  return html.evaluate().setTitle("Select File");
+    
+  
+  // if (e.parameter.param == "doc") {
+  //   let html = HtmlService.createTemplateFromFile("index")
+  //     .evaluate().setTitle("Select Document");
+  //   return html;
+  // } else if (e.parameter.param == "sheet") {
+  //   let html = HtmlService.createTemplateFromFile("sheet")
+  //     .evaluate().setTitle("Select Sheet");
+  //   return html;
+  // }
+  // else if (e.parameter.param == "form") {
+  //   let html = HtmlService.createTemplateFromFile("form")
+  //     .evaluate().setTitle("Select Form");
+  //   return html;
+  // }
 }
 
 //  Called when picker is initialised.
@@ -48,6 +55,8 @@ function storeDriveSelections(fileId) {
     .setProperty("filePick", JSON.stringify(true));
 
   console.log("file", file.getProperties());
+
+  updateCardd();
 }
 
 function storeDriveSelectionsForSheet(fileId) {
@@ -169,6 +178,8 @@ function createNotice(docDetail, inputDetails) {
 }
 
 function sendNotice(e) {
+  console.log("e",e);
+  return;
   console.log("form response = ", e.formInput.select1);
   let docDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("files"));
   let sheetDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("sheetFiles"));
@@ -242,10 +253,10 @@ function sendNotice(e) {
       attachments: pdf
     });
   })
-  // PropertiesService.getUserProperties().deleteProperty("inputData");
+  PropertiesService.getUserProperties().deleteProperty("inputData");
   // PropertiesService.getUserProperties().setProperty("filePick", JSON.stringify(false));
   // PropertiesService.getUserProperties().setProperty("sheetFilePick", JSON.stringify(false));
-  // return CardService.newNavigation().updateCard(onhomepage(e));
+  return CardService.newNavigation().updateCard(onhomepage(e));
 
 }
 
