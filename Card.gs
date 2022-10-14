@@ -1,6 +1,8 @@
 const deploy_link = "https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=";
-function onhomepage(e) {
-  console.log("e=", e);
+function onhomepage() {
+  // if(status == "reload"){
+  //  return formCard();
+  // }
 
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
@@ -36,8 +38,7 @@ function onhomepage(e) {
   let cardSection2Divider1 = CardService.newDivider();
 
   let cardSection1ButtonList1Button1Action1 = CardService.newAction()
-    .setFunctionName('saveData')
-    .setParameters({ "e": JSON.stringify(e) })
+    .setFunctionName('saveData');
 
   let cardSection1ButtonList1Button1 = CardService.newTextButton()
     .setText('Next')
@@ -72,19 +73,10 @@ function formCard() {
 
   //  Have to set the Function in palce of setOpenLink 
 
-  var action = CardService.newAction().setFunctionName('openLinkCallback').setParameters({ "reload": "yes", "param1": param1 });
+  var action = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param1 });
   let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOnClickAction(action)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Template');
-
-
-
-  // let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-  //   .setUrl(`${deploy_link}${param1}`)
-  //   .setOpenAs(CardService.OpenAs.OVERLAY)
-  //   .setOnClose(CardService.OnClose.RELOAD))
-  //   .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
-  //   .setAltText('Select Template');
 
   let cardSection1DecoratedText1 = CardService.newDecoratedText()
     .setText('Select the Template')
@@ -106,10 +98,8 @@ function formCard() {
     console.log("Picker for document stopped running");
   }
 
-  let cardSection1DecoratedText2Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`${deploy_link}${param2}`)
-    .setOpenAs(CardService.OpenAs.OVERLAY)
-    .setOnClose(CardService.OnClose.RELOAD))
+  var action1 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param2 });
+  let cardSection1DecoratedText2Button1 = CardService.newImageButton().setOnClickAction(action1)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Sheet');
 
@@ -157,10 +147,8 @@ function formCard() {
     cardSection1SelectionInput2 = cardSection1SelectionInput2.addItem(element, element, condition);
   })
 
-  let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOpenLink(CardService.newOpenLink()
-    .setUrl(`${deploy_link}${param3}`)
-    .setOpenAs(CardService.OpenAs.OVERLAY)
-    .setOnClose(CardService.OnClose.RELOAD))
+  var action2 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param3 });
+  let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOnClickAction(action2)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Form');
 
@@ -202,13 +190,12 @@ function formCard() {
   let cardSection1 = CardService.newCardSection()
     .addWidget(cardSection1DecoratedText1)
     .addWidget(cardSection1Divider1)
-    .addWidget(cardSection1DecoratedText2)
-    .addWidget(cardSection1SelectionInput1)
-    .addWidget(cardSection1SelectionInput2)
-    .addWidget(cardSection1Divider1)
     .addWidget(cardSection1DecoratedText3)
     .addWidget(cardSection1Divider1)
     .addWidget(cardSection1TextInput2)
+    .addWidget(cardSection1DecoratedText2)
+    .addWidget(cardSection1SelectionInput1)
+    .addWidget(cardSection1SelectionInput2)
     .addWidget(cardSection1Divider1)
     .addWidget(cardSection1ButtonList1);
 
@@ -224,24 +211,19 @@ function test() {
 
 function openLinkCallback(e) {
   console.log(e);
-  let param1 = e.parameters.param1;
+  let param = e.parameters.param;
   return CardService.newActionResponseBuilder()
     .setOpenLink(CardService.newOpenLink()
-      .setUrl(`${deploy_link}${param1}`)
+      .setUrl(`${deploy_link}${param}`)
       .setOpenAs(CardService.OpenAs.OVERLAY)
       .setOnClose(CardService.OnClose.RELOAD))
       .build();
 
 }
 
-function updateCardd(){
-  //  let card = formCard();
-
-  // let navigation = CardService.newNavigation()
-  //   .updateCard(card);
-  // let actionResponse = CardService.newActionResponseBuilder()
-  //   .setNavigation(navigation);
-  // return actionResponse.build();
-
+function onFormCard(){
+  console.log("This is It");
+  // let status = "reload";
+  // return onhomepage(status);
   return formCard();
-}
+}  

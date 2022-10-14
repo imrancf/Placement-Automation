@@ -56,7 +56,7 @@ function storeDriveSelections(fileId) {
 
   console.log("file", file.getProperties());
 
-  updateCardd();
+  onFormCard();
 }
 
 function storeDriveSelectionsForSheet(fileId) {
@@ -82,6 +82,7 @@ function storeDriveSelectionsForSheet(fileId) {
     .setProperty("sheetFilePick", JSON.stringify(true));
 
   console.log("sheetFiles", file.getProperties());
+  onFormCard();
 }
 
 function storeDriveSelectionsForForm(fileId) {
@@ -107,6 +108,8 @@ function storeDriveSelectionsForForm(fileId) {
     .setProperty("formFilePick", JSON.stringify(true));
 
   console.log("formFiles", file.getProperties());
+  onFormCard();
+
 }
 
 function clearFilesFromPropServ() {
@@ -137,7 +140,7 @@ function saveData(e) {
   PropertiesService.getUserProperties().setProperties({ "inputData": JSON.stringify(e.formInput) });
   let inputDetails = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
   console.log("saved", inputDetails);
-  return formCard(e);
+  return formCard();
 
 }
 
@@ -179,7 +182,6 @@ function createNotice(docDetail, inputDetails) {
 
 function sendNotice(e) {
   console.log("e",e);
-  return;
   console.log("form response = ", e.formInput.select1);
   let docDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("files"));
   let sheetDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("sheetFiles"));
