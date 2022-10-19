@@ -1,8 +1,12 @@
-const deploy_link = "https://script.google.com/a/macros/i.cloudfort.in/s/AKfycbxCz4GoVshaEG11ujJXpnlIw6cEBRGmjUNY89N896ca/dev?param=";
+const deploy_link = "https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=";
+
 function onhomepage() {
-  // if(status == "reload"){
-  //  return formCard();
-  // }
+  let status = PropertiesService.getUserProperties().getProperty("status");
+  console.log(status);
+
+  if (status) {
+    return formCard();
+  }
 
   let cardHeader1 = CardService.newCardHeader()
     .setTitle('Generate Notice')
@@ -11,9 +15,7 @@ function onhomepage() {
   let cardSection2TextInput1 = CardService.newTextInput();
   let cardSection2TextInput2 = CardService.newTextInput();
   let cardSection2TextInput3 = CardService.newTextInput();
-  let cardSection2DatePTimePicker1 = CardService.newDateTimePicker()
-
-
+  let cardSection2DatePTimePicker1 = CardService.newDateTimePicker();
 
   cardSection2TextInput1 = cardSection2TextInput1
     .setFieldName('name')
@@ -45,11 +47,8 @@ function onhomepage() {
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setOnClickAction(cardSection1ButtonList1Button1Action1);
 
-
-
   let cardSection1ButtonList1 = CardService.newButtonSet()
     .addButton(cardSection1ButtonList1Button1);
-  // .addButton(cardSection1ButtonList1Button2)
 
   let cardSection2 = CardService.newCardSection()
     .addWidget(cardSection2TextInput1)
@@ -73,7 +72,7 @@ function formCard() {
 
   //  Have to set the Function in palce of setOpenLink 
 
-  var action = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param1 });
+  var action = CardService.newAction().setFunctionName('openLinkCallback').setParameters({ "param": param1 });
   let cardSection1DecoratedText1Button1 = CardService.newImageButton().setOnClickAction(action)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Template');
@@ -98,7 +97,7 @@ function formCard() {
     console.log("Picker for document stopped running");
   }
 
-  var action1 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param2 });
+  var action1 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({ "param": param2 });
   let cardSection1DecoratedText2Button1 = CardService.newImageButton().setOnClickAction(action1)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Sheet');
@@ -147,7 +146,7 @@ function formCard() {
     cardSection1SelectionInput2 = cardSection1SelectionInput2.addItem(element, element, condition);
   })
 
-  var action2 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({"param": param3 });
+  var action2 = CardService.newAction().setFunctionName('openLinkCallback').setParameters({ "param": param3 });
   let cardSection1DecoratedText3Button1 = CardService.newImageButton().setOnClickAction(action2)
     .setIconUrl("https://i.ibb.co/56ykKjx/211608-folder-icon.png")
     .setAltText('Select Form');
@@ -184,7 +183,17 @@ function formCard() {
     .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
     .setOnClickAction(cardSection1ButtonList1Button1Action1);
 
+  let cardSection1ButtonList1Button1Action2 = CardService.newAction()
+    .setFunctionName('goBack')
+
+  let cardSection1ButtonList1Button2 = CardService.newTextButton()
+    .setText('Back')
+    .setBackgroundColor('#1b9655ff')
+    .setTextButtonStyle(CardService.TextButtonStyle.FILLED)
+    .setOnClickAction(cardSection1ButtonList1Button1Action2);
+
   let cardSection1ButtonList1 = CardService.newButtonSet()
+    .addButton(cardSection1ButtonList1Button2)
     .addButton(cardSection1ButtonList1Button1);
 
   let cardSection1 = CardService.newCardSection()
@@ -204,26 +213,32 @@ function formCard() {
     .build();
   return card;
 }
+
 function test() {
   let param1 = "doc";
   console.log(`${deploy_link}${param1}`);
 }
 
 function openLinkCallback(e) {
-  console.log(e);
   let param = e.parameters.param;
   return CardService.newActionResponseBuilder()
     .setOpenLink(CardService.newOpenLink()
       .setUrl(`${deploy_link}${param}`)
       .setOpenAs(CardService.OpenAs.OVERLAY)
       .setOnClose(CardService.OnClose.RELOAD))
-      .build();
-
+    .build();
 }
 
-function onFormCard(){
-  console.log("This is It");
-  // let status = "reload";
-  // return onhomepage(status);
-  return formCard();
-}  
+function onFormCard() {
+  PropertiesService.getUserProperties().setProperties({ "status": "changed" });
+  return onhomepage();
+}
+
+function goBack() {
+  deleteProp();
+  return onhomepage()
+}
+
+function deleteProp() {
+  PropertiesService.getUserProperties().deleteProperty("status");
+}

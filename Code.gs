@@ -1,26 +1,9 @@
-
 function doGet(e) {
   console.log(e)
   let html = HtmlService.createTemplateFromFile("index");
   let mime = e.parameter.param;
   html.mime = mime;
   return html.evaluate().setTitle("Select File");
-    
-  
-  // if (e.parameter.param == "doc") {
-  //   let html = HtmlService.createTemplateFromFile("index")
-  //     .evaluate().setTitle("Select Document");
-  //   return html;
-  // } else if (e.parameter.param == "sheet") {
-  //   let html = HtmlService.createTemplateFromFile("sheet")
-  //     .evaluate().setTitle("Select Sheet");
-  //   return html;
-  // }
-  // else if (e.parameter.param == "form") {
-  //   let html = HtmlService.createTemplateFromFile("form")
-  //     .evaluate().setTitle("Select Form");
-  //   return html;
-  // }
 }
 
 //  Called when picker is initialised.
@@ -28,7 +11,7 @@ function pickerConfig() {
   DriveApp.getRootFolder();
   return {
     oauthToken: ScriptApp.getOAuthToken(),
-    developerKey: "AIzaSyBKdhXo3-OLXghFyPpHrHXrEGSqhvmifzI"
+    developerKey: "AIzaSyBI_fVDuIk2sZfNdKi_BFxpRGeyXDQyyPo"
   }
 }
 
@@ -181,7 +164,8 @@ function createNotice(docDetail, inputDetails) {
 }
 
 function sendNotice(e) {
-  console.log("e",e);
+  deleteProp();
+  console.log("e", e);
   console.log("form response = ", e.formInput.select1);
   let docDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("files"));
   let sheetDetail = JSON.parse(PropertiesService.getUserProperties().getProperty("sheetFiles"));
