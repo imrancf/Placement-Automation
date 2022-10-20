@@ -1,6 +1,6 @@
 const deploy_link = "https://script.google.com/a/macros/cloudfort.in/s/AKfycbwpnfPkC1DY4WEOC4HO9CCR95deYlW4wroZiyCJASE/dev?param=";
 
-function onhomepage() {
+function onhomepage(error) {
   let status = PropertiesService.getUserProperties().getProperty("status");
   console.log(status);
 
@@ -50,13 +50,23 @@ function onhomepage() {
   let cardSection1ButtonList1 = CardService.newButtonSet()
     .addButton(cardSection1ButtonList1Button1);
 
-  let cardSection2 = CardService.newCardSection()
+  let cardSection2 = CardService.newCardSection();
+
+  cardSection2 = cardSection2
     .addWidget(cardSection2TextInput1)
     .addWidget(cardSection2TextInput2)
     .addWidget(cardSection2TextInput3)
     .addWidget(cardSection2DatePTimePicker1)
     .addWidget(cardSection2Divider1)
     .addWidget(cardSection1ButtonList1);
+
+  if (error) {
+    let errorText = CardService.newTextParagraph()
+      .setText('Please enter all the fields.');
+
+    cardSection2 = cardSection2
+      .addWidget(errorText);
+  }
 
   let card = CardService.newCardBuilder()
     .setHeader(cardHeader1)

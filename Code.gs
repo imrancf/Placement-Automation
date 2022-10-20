@@ -121,18 +121,18 @@ function fetchHead(url) {
 
 function saveData(e) {
   PropertiesService.getUserProperties().setProperties({ "inputData": JSON.stringify(e.formInput) });
-  let inputDetails = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
-  console.log("saved", inputDetails);
-  return formCard();
+  const inputDetails = JSON.parse(PropertiesService.getUserProperties().getProperty("inputData"));
+  const inputDetailsLength = Object.keys(inputDetails).length;
 
+  if ((inputDetailsLength < 4) || (inputDetails === "{}")) {
+    const error = "error";
+    return onhomepage(error);
+  }
+
+  return formCard();
 }
 
-
-
 function createNotice(docDetail, inputDetails) {
-  // console.log("e",e);
-
-  console.log("docDetail =", docDetail);
   let docID = docDetail[0].id;
   let file = DriveApp.getFileById(docID);
   let parentFolder = file.getParents();
@@ -245,9 +245,3 @@ function sendNotice(e) {
   return CardService.newNavigation().updateCard(onhomepage(e));
 
 }
-
-// function test(){
-//   console.log(PropertiesService.getUserProperties().getProperty("sheetFiles"));
-// }
-
-
